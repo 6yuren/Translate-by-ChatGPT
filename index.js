@@ -1,38 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Translate by ChatGPT</title>
-    <script src="index.js"></script>
-    <!-- <script src="language-data.js"></script> -->
-</head>
-<body>
-    <form>
-        <div>Paste Text: </div>
-        <br>
-        <!-- 上傳文件按鈕 -->
-        <textarea id="text-to-translate" name="text-to-translate" rows="10" cols="80"></textarea>
-        <br>
-        <!-- <label for="target-language">Target Language:</label> -->
-        <!-- <select id="target-language"></select> -->
-        <br>
-        <label for="target-model">Model:</label>
-        <select id="target-model">
-            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-            <option value="gpt-3.5-turbo-0301">gpt-3.5-turbo-0301</option>
-        </select>
-        <br>
-        <label for="api-key">OpenAI API Key:</label>
-        <input type="password" id="api-key" name="api-key">
-        <br>
-        <button id="translate-button" type="button">Translate</button>
-        <button id="download-button">Download Translation</button>
-    </form>
-    <label for="translation-result">Translation Result:</label>
-    <br>
-    <textarea id="translation-result" name="translation-result" rows="10" cols="80" disabled></textarea>
-    <div>
-    <span>This page is referenced from Grasseed, <a href="https://github.com/Grasseed/ChatGPT-Translator">ChatGPT-Translator</a></span>
-    </div>
-</body>
-</html>
+document.addEventListener('DOMContentLoaded', function() {
+    var translateButton = document.getElementById('translate-button');
+    var textToTranslate = document.getElementById('text-to-translate');
+    var translationResult = document.getElementById('translation-result');
+    // var targetLanguage = document.getElementById('target-language');
+    var apiKeyInput = document.getElementById('api-key');
+    var targetmodel = document.getElementById('target-model');
+    var downloadButton = document.getElementById('download-button');
+
+    // const select = document.getElementById('target-language');
+    // languageData.forEach((lang) => {
+    //     const option = document.createElement('option');
+    //     option.value = lang.code;
+    //     option.textContent = lang.name;
+    //     select.appendChild(option);
+    // });
+
+    translateButton.addEventListener('click', function() {
+        var text = textToTranslate.value;
+        var paragraphs = text.split("\n").filter(paragraph => paragraph.trim() !== "");
+        var translatedParagraphs = [];
+
+        paragraphs.forEach(function(paragraph, index) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://api.openai.com/v1/chat/completions");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("Authorization", "Bearer " + apiKeyInput.value);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        var translation = response.choices[0].message.content;
+                        translatedParagraphs[index] = translation;
+
+                        if (translatedParagraphs.length === paragraphs.length && translatedParagraphs.every(Boolean)) {
+                            var translatedText = translatedParagraphs.join("\n");
+                            translationResult.innerHTML = translatedText;
+                        }
+                    } else {
+                        var error = JSON.parse(xhr.responseText);
+                        console.error("Error: " + error.error.message);
+                    }
+                }
+            };
+
+            // var language = "繁體中文" /*targetLanguage.value*/;
+            var model = targetmodel.value;
+            var data = JSON.stringify({
+                "model": model,
+                "messages": [{"role": "user", "content": "請以繁體中文與台灣用語翻譯: {" + paragraph + "}"}]
+            });
+
+            xhr.send(data);
+        });
+    });
+
+    // 添加下載按鈕的點擊事件
+    downloadButton.addEventListener('click', function() {
+        var translationText = translationResult.value;
+        var blob = new Blob([translationText], { type: 'text/plain' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'translation.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+});
