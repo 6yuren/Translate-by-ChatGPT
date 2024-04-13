@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <title>Translate by ChatGPT</title>
     <script src="index.js"></script>
-    <script src="language-data.js"></script>
+    <!-- <script src="language-data.js"></script> -->
 </head>
 <body>
     <form>
+        <div>Paste Text: </div>
         <br>
         <!-- 上傳文件按鈕 -->
-        <label for="file-upload">Upload File:</label>
-        <input type="file" id="file-upload" name="file-upload">
+        <textarea id="text-to-translate" name="text-to-translate" rows="10" cols="80"></textarea>
         <br>
-        <br>
-        <label for="target-language">Target Language:</label>
-        <select id="target-language"></select>
+        <!-- <label for="target-language">Target Language:</label> -->
+        <!-- <select id="target-language"></select> -->
         <br>
         <label for="target-model">Model:</label>
         <select id="target-model">
@@ -31,7 +30,7 @@
     </form>
     <label for="translation-result">Translation Result:</label>
     <br>
-    <textarea id="translation-result" name="translation-result" rows="15" cols="80" disabled></textarea>
+    <textarea id="translation-result" name="translation-result" rows="10" cols="80" disabled></textarea>
     <div>
     <span>This page is referenced from Grasseed, <a href="https://github.com/Grasseed/ChatGPT-Translator">ChatGPT-Translator</a></span>
     </div>
