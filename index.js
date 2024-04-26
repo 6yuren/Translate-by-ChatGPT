@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             };
 
-            // var language = "繁體中文" /*targetLanguage.value*/;
             var model = targetmodel.value;
             var data = JSON.stringify({
                 "model": model,
