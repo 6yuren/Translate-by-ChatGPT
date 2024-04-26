@@ -7,14 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var targetmodel = document.getElementById('target-model');
     var downloadButton = document.getElementById('download-button');
 
-    // const select = document.getElementById('target-language');
-    // languageData.forEach((lang) => {
-    //     const option = document.createElement('option');
-    //     option.value = lang.code;
-    //     option.textContent = lang.name;
-    //     select.appendChild(option);
-    // });
-
     translateButton.addEventListener('click', function() {
         var text = textToTranslate.value;
         var paragraphs = text.split("\n").filter(paragraph => paragraph.trim() !== "");
