@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var translateButton = document.getElementById('translate-button');
     var textToTranslate = document.getElementById('text-to-translate');
     var translationResult = document.getElementById('translation-result');
-    // var targetLanguage = document.getElementById('target-language');
     var apiKeyInput = document.getElementById('api-key');
     var targetmodel = document.getElementById('target-model');
     var downloadButton = document.getElementById('download-button');
